@@ -1,2 +1,1 @@
-# bash
-Bash Config
+# Bash Config
