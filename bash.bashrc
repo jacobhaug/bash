@@ -300,7 +300,7 @@
     case "$-" in
     *i*)
 
-    if [[ "$whoami" == "root" || "$whoami" == "jacob" || "$whoami" == "deploy" || "$whoami" == "vagrant"]]; then
+    if [[ "$whoami" == "root" || "$whoami" == "jacob" || "$whoami" == "deploy" || "$whoami" == "vagrant" ]]; then
         clear
     else
         clear
