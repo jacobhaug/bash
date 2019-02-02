@@ -1,19 +1,3 @@
-#  ---------------------------------------------------------------------------
-#
-#  Description:  This file holds all my BASH configurations and aliases
-#
-#  Sections:
-#  1.   Environment Configuration
-#  2.   Make Terminal Better (remapping defaults and adding functionality)
-#  3.   File and Folder Management
-#  4.   Searching
-#  5.   Process Management
-#  6.   Networking
-#  7.   System Operations & Information
-#  8.   Web Development
-#
-#  ---------------------------------------------------------------------------
-
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
 #   -------------------------------
@@ -254,7 +238,7 @@
 #   6.  NETWORKING
 #   ---------------------------
 
-    alias myip='curl ip.appspot.com'                    # myip:         Public facing IP Address
+    alias myip='curl ip.encryption.io'                  # myip:         Public facing IP Address
     alias netCons='lsof -i'                             # netCons:      Show all open TCP/IP sockets
     alias lsock='sudo /usr/sbin/lsof -i -P'             # lsock:        Display open sockets
     alias lsockU='sudo /usr/sbin/lsof -nP | grep UDP'   # lsockU:       Display only open UDP sockets
@@ -270,7 +254,7 @@
     }
 
     whatismyip () {
-        lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org/ | grep "Current IP Address" | cut -d":" -f2 | cut -d" " -f2
+        curl ip.encryption.io
     }
 
     upinfo () {
@@ -280,55 +264,29 @@
 #   ii:  display useful host related informaton
 #   -------------------------------------------------------------------
     ii() {
-        echo -e "\nYou are logged on ${RED}$HOST"
+        clear
+		echo -e "\nYou are logged on ${RED}$HOST"
         echo -e "\nAdditionnal information:$NC " ; uname -a
         echo -e "\n${RED}Users logged on:$NC " ; w -h
         echo -e "\n${RED}Current date :$NC " ; date
         echo -e "\n${RED}Machine stats :$NC " ; uptime
-        echo -e "\n${RED}Current network location :$NC " ; scselect
         echo -e "\n${RED}Public facing IP Address :$NC " ;myip
         echo
     }
+	
+	login() {
+        clear
+		echo -e "${LIGHTGRAY}";figlet "Welcome  $USER";
+	    echo -ne "${red}Today is:\t\t${cyan}" `date`; echo ""
+	    echo -e "${red}Kernel Information: \t${cyan}" `uname -smr`
+	    echo -ne "${cyan}";upinfo;echo ""
+	    echo -e "${cyan}"; cal -3
+	}
+	login
 
 #   ---------------------------------------
 #   7.  SYSTEMS OPERATIONS & INFORMATION
 #   ---------------------------------------
-
-    # Set Who Am I Variable
-    whoami=`whoami`
-
-    case "$-" in
-    *i*)
-
-    if [[ "$whoami" == "root" || "$whoami" == "jacob" || "$whoami" == "deploy" || "$whoami" == "vagrant" ]]; then
-        clear
-    else
-        clear
-        cat /usr/share/motd/legal
-
-        echo -n "Do you agree to the above terms? (YES or NO? [ENTER]) "
-        read -e confirmation
-
-        # Ensuring confirmation is all lower case!
-        confirmation="$(echo ${confirmation} | tr 'A-Z' 'a-z')"
-
-        if [[ $confirmation =~ ^([yY][eE][sS]|[yY])$ ]]
-
-        then
-            clear
-        else
-            pkill -KILL -u $whoami
-        fi
-    fi
-
-    echo -e "${LIGHTGRAY}";figlet "Welcome  $USER";
-    echo -ne "${red}Today is:\t\t${cyan}" `date`; echo ""
-    echo -e "${red}Kernel Information: \t${cyan}" `uname -smr`
-    echo -ne "${cyan}";upinfo;echo ""
-    echo -e "${cyan}"; cal -3
-    ;;
-    esac
-
     alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
 
 #   ---------------------------------------
@@ -337,39 +295,26 @@
 
     # Nginx Rules
     alias xcd='cd /etc/nginx/'
-    alias xsites='cd /etc/nginx/sites-available'
-    alias xconf='cd /etc/nginx/includes'
-    alias xedit='sudo subl /etc/nginx/nginx.conf'
-    alias xrr='sudo service nginx reload; sudo service nginx restart'
-    alias xrestart='sudo service nginx restart'
-    alias xreload='sudo service nginx reload'
-    alias xstop='sudo service nginx stop'
-    alias xstart='sudo service nginx start'
-    alias rphp='sudo service php5-fpm restart'
-    alias pstop='sudo service php5-fpm stop'
-    alias pstart='sudo service php5-fpm start'
+    alias xsites='cd /etc/nginx/conf.d'
+    alias xedit='sudo vi /etc/nginx/nginx.conf'
+    alias xrr='sudo systemctl restart nginx'
+    alias xrestart='sudo systemctl restart nginx'
+    alias xreload='sudo systemctl reload nginx'
+    alias xstop='sudo systemctl stop nginx'
+    alias xstart='sudo systemctl start nginx'
+    alias rphp='sudo systemctl restart php7.2-fpm.service'
+    alias pstop='sudo systemctl stop php7.2-fpm.service'
+    alias pstart='sudo systemctl start php7.2-fpm.service'
     alias xlogs='cd /var/log/nginx/'
-
-    # Apache Rules
-    alias acd='cd /etc/apache2/'
-    alias asites='cd /etc/apache2/sites-available'
-    alias aconf='cd /etc/apache2/includes'
-    alias aedit='vim /etc/apache2/apache2.conf'
-    alias arr='sudo service apache2 reload; sudo service apache2 restart'
-    alias arestart='sudo service apache2 restart'
-    alias areload='sudo service apache2 reload'
-    alias astop='sudo service apache2 stop'
-    alias astart='sudo service apache2 start'
-    alias alogs='cd /var/log/apache2/'
-    alias felogs='tail -f /var/log/apache2/error.log'
-    alias falogs='tail -f /var/log/apache2/access.log'
+	alias fxlogs='tail -f /var/log/nginx/error.log'
+    alias myrestart='sudo systemctl restart mysql'
+    alias mystop='sudo systemctl stop mysql'
+    alias mystart='sudo systemctl start mysql'
 
     # General Rules
-    alias server='cd /server'
+    alias server='cd /home/deploy/server'
     alias xhosts='sudo vim /etc/hosts'
-    alias myrestart='sudo service mysql restart'
-    alias mystop='sudo service mysql stop'
-    alias mystart='sudo service mysql start'
+
 
     # SSL Certificate Rules
     certinfo () { openssl x509 -in "$1" -noout -text; }
