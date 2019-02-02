@@ -287,7 +287,9 @@
 #   ---------------------------------------
 #   7.  SYSTEMS OPERATIONS & INFORMATION
 #   ---------------------------------------
-    alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
+	alias root='sudo su -'
+	alias suroot='sudo -E -s'
+	alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
 
 #   ---------------------------------------
 #   8.  WEB DEVELOPMENT
